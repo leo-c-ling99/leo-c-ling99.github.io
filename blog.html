@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <title>Leo Ling's Projects</title>
+  <link rel="icon" href="src/icon.png">
+
+
+  <!-- Bootstrap core CSS -->
+  <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Custom fonts for this template -->
+  <link href="https://fonts.googleapis.com/css?family=Saira+Extra+Condensed:500,700" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Muli:400,400i,800,800i" rel="stylesheet">
+  <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet">
+
+  <!-- Custom styles for this template -->
+  <link href="css/resume.min.css" rel="stylesheet">
+
+</head>
+
+<body id="page-top">
+
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top" id="sideNav">
+    <a class="navbar-brand js-scroll-trigger" href="#page-top">
+      <span class="d-block d-lg-none">Leo Ling</span>
+      <span class="d-none d-lg-block">
+        <img class="img-fluid img-profile rounded-circle mx-auto mb-2" src="img/profile.png" alt="">
+      </span>
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link js-scroll-trigger" href="index.html#about">Return to Home Page</a>
+          <a class="nav-link js-scroll-trigger" href="#index">Table of Contents</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="container-fluid p-0">
+
+    <hr class="m-0">
+
+    <section class="resume-section p-3 p-lg-5 d-flex align-items-center" id="index">
+      <div class="w-100">
+        <h2 class="mb-5">Projects</h2>
+        <p class="lead mb-3">Here are a couple of interesting projects I've worked on! More to come...</p>
+        <br>
+        <ul class="list-group">
+            <li class="list-group-item">
+                <a class="nav-link js-scroll-trigger" href="#redditParser">Reddit Comment Parser</a>
+            </li>
+      </div>
+    </section>
+
+    <hr class="m-0">
+
+    <section class="resume-section p-3 p-lg-5 d-flex align-items-center" id="redditParser">
+      <div class="w-100">
+        <h2 class="mb-5">Reddit Comment Parser</h2>
+        <img src="img/redditParser.jpg" class="img-fluid mb-5 rounded" alt="Responsive image">
+        <p>
+            Over the summer, I wrote a Reddit parser to parse through all comments to detect a certain link. 
+            The link is similar to a Rick Roll, or Darude Sandstorm for something a bit more modern, where the joke is purposely misleading the recipient.
+            So the goal of the project was to detect when this reddit link is used to improperly direct someone.
+            In short, the bot had to read through all new comments; detect when a certain link is used; check if the link text (human readable section) is misleading; and reply if so.
+        </p>
+        <p>
+          I did this in Python, because there was a nice library available: PRAW. PRAW handles most of the REST calls, allow us to deal directly with comment objects.
+          By design, the PRAW API only returns a maximum of 100 comments at a time. Since it is assumed that this link can appear within any subreddit, 
+          this means we must constantly parse through the most recent comments and quickly decide what to do with each comment. 
+          Luckily, PRAW handles the API calls and will wait if we are making calls too frequently. Using regular expressions we can parse through each comment's text in a relatively quick manner.
+        </p>
+        <p>
+          That's all well and good, but we want to minimize the time of each loop to avoid missing comments. One way I have done so is by keeping a list of previously processed comments. 
+          To avoid the list becoming too big, I implemented a queue with over 100 elements. When the queue is full, the oldest element is deleted. If the queue is less than or equal to 100- the number of comments that PRAW can pull in one go- 
+          AND the list of comments is the same between runs, the queue will have deleted a repeated comment by the time we have reached it. This will result in the program processing a repeated comment again. 
+        </p>
+        <p>
+          After all processing, we have to send a reply to the comments that need it. To not completely spoil the fun, I decided to wait 5 minutes before sending a response. 
+          This is done by working with the asynchronous IO library or asyncio for short. This library can get very complicated, but all I am using it for is a nonblocking wait period. 
+          It might be interesting to take a further look into the asyncio library, since before I was using threading options instead. 
+        </p>
+
+
+      </div>
+    </section>
+
+
+  </div>
+
+  <!-- Bootstrap core JavaScript -->
+  <script src="vendor/jquery/jquery.min.js"></script>
+  <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Plugin JavaScript -->
+  <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+
+  <!-- Custom scripts for this template -->
+  <script src="js/resume.min.js"></script>
+
+</body>
+
+</html>
